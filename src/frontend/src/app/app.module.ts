@@ -16,6 +16,7 @@ import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 
 import { authInterceptorProviders } from "./_helpers/auth.interceptor";
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { authInterceptorProviders } from "./_helpers/auth.interceptor";
     UserDetailComponent,
     MessagesComponent,
     DashboardComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,

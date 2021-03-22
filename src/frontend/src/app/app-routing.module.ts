@@ -9,7 +9,11 @@ import {LoginComponent} from "./login/login.component";
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: AdminComponent },
-  { path: 'dashboard', component: DashboardComponent },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: []
+  },
   { path: 'user/:id', component: UserDetailComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 ];
