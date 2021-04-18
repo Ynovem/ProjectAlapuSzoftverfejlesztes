@@ -1,0 +1,44 @@
+<p>Solver works!</p>
+
+<div class="container">
+	<div class="row justify-content-md-center">
+		<div class="col-sm">
+			<div class="input-group">
+				<div class="input-group-prepend">
+					<label class="input-group-text" for="layoutSelector">Layout</label>
+				</div>
+				<select class="custom-select" id="layoutSelector" [(ngModel)]="selectedSeatLayout">
+					<option [ngValue]="null" disabled>Select Layout</option>
+					<option *ngFor="let layout of seatLayouts;" [ngValue]="layout">{{layout.name}}</option>
+				</select>
+			</div>
+			<div class="input-group">
+				<div class="input-group-prepend">
+					<label class="input-group-text" for="solverSelector">Solver</label>
+				</div>
+				<select class="custom-select" id="solverSelector" [(ngModel)]="selectedSolver">
+					<option [ngValue]="null" disabled>Choose...</option>
+					<option *ngFor="let solver of solvers;" [ngValue]="solver">{{solver.name}}</option>
+				</select>
+			</div>
+			<div>
+				<fieldset *ngIf="selectedSolver">
+					<legend>Description of ...algorithm....</legend>
+					{{selectedSolver.description}}
+				</fieldset>
+			</div>
+		</div>
+		<div class="col-sm">
+			<div class="input-group">
+				<div class="text-center" *ngIf="selectedSeatLayout">
+					<img [src]="selectedSeatLayout.thumbnail" alt="">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row justify-content-md-center">
+		<div class="col-sm">
+			<button type="button" class="btn btn-secondary" (click)="solve()" [disabled]="seatLayouts == null || selectedSolver == null">Solve</button>
+		</div>
+	</div>
+</div>
