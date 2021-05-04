@@ -9,9 +9,11 @@ import { SeatmapComponent } from "./seatmap/seatmap.component";
 import {LandingPageComponent} from "./landing-page/landing-page.component";
 import {SolverComponent} from "./solver/solver.component";
 import {DesignerComponent} from "./designer/designer.component";
+import {LayoutsComponent} from "./layouts/layouts.component";
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
+  { path: 'layouts', component: LayoutsComponent },
   { path: 'designer', component: DesignerComponent },
   { path: 'solver', component: SolverComponent },
   { path: 'login', component: LoginComponent },

@@ -1,4 +1,4 @@
-export interface User {
+export interface Layout {
 	id: number;
-	name: string;
+	coords: string;
 }

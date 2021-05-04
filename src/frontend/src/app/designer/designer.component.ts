@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+import {LayoutService} from "../layout.service";
+
 import {ISeat, Metric, OptSeat, Seat} from '../seatmap';
 
 @Component({
@@ -13,7 +15,7 @@ export class DesignerComponent {
   @Input() rowMetric: Metric = new Metric();
   @Input() colMetric: Metric = new Metric();
 
-  constructor() { }
+  constructor(private layoutService: LayoutService) { }
 
   public generateSeatMap() {
     let map: OptSeat[][] = [];
@@ -48,5 +50,8 @@ export class DesignerComponent {
     }
 
     this.json = json;
+    this.layoutService.saveLayout(JSON.stringify(json)).subscribe(data => {
+      console.log("[Debug] Data:", data);
+    });
   }
 }

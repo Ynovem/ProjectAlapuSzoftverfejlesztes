@@ -1,0 +1,8 @@
+<h2>Layouts</h2>
+<ul class="layout">
+	<li *ngFor="let layout of layouts">
+<!--		<a routerLink="/layouts/{{layout.id}}">-->
+			<span class="badge">{{layout.id}}</span> {{layout.coords | json}}
+<!--		</a>-->
+	</li>
+</ul>
