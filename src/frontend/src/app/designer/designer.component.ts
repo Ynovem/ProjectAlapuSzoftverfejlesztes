@@ -11,6 +11,7 @@ import {ISeat, Metric, OptSeat, Seat} from '../seatmap';
 })
 export class DesignerComponent {
   map: OptSeat[][] = [];
+  name: string = "";
   json: object[] = [];
   @Input() rowMetric: Metric = new Metric();
   @Input() colMetric: Metric = new Metric();
@@ -50,7 +51,11 @@ export class DesignerComponent {
     }
 
     this.json = json;
-    this.layoutService.saveLayout(JSON.stringify(json)).subscribe(data => {
+    const body = {
+      'name': this.name,
+      'coords': JSON.stringify(json),
+    };
+    this.layoutService.saveLayout(body).subscribe(data => {
       console.log("[Debug] Data:", data);
     });
   }
