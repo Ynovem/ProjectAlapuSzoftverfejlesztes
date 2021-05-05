@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Optional
 
 from pydantic import BaseModel
@@ -5,6 +6,7 @@ from pydantic import BaseModel
 
 # Shared properties
 class LayoutBase(BaseModel):
+    name: str
     coords: str
 
 
@@ -15,6 +17,7 @@ class LayoutCreate(LayoutBase):
 
 class LayoutInDBBase(LayoutBase):
     id: Optional[int] = None
+    created: datetime = None
 
     class Config:
         orm_mode = True

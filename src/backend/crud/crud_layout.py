@@ -19,7 +19,8 @@ class CRUDLayout:
     def create(self, db: Session, *, obj_in: LayoutCreate) -> Layout:
         # pass
         db_obj = Layout(
-            coords=obj_in.coords
+            name=obj_in.name,
+            coords=obj_in.coords,
         )
         db.add(db_obj)
         db.commit()

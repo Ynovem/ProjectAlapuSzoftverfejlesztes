@@ -20,7 +20,7 @@ export class LayoutService {
     return this.http.get(LAYOUT_API, httpOptions);
   }
 
-  saveLayout(coords: string): Observable<any> {
-    return this.http.post(LAYOUT_API, {coords: coords}, httpOptions);
+  saveLayout(body: any): Observable<any> {
+    return this.http.post(LAYOUT_API, body, httpOptions);
   }
 }
