@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Layout } from '../layout';
+import {Layout, LayoutDisplay} from '../layout';
 import { LayoutService } from '../layout.service';
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-layouts',
@@ -9,11 +10,13 @@ import { LayoutService } from '../layout.service';
 })
 export class LayoutsComponent implements OnInit {
 
-  layouts: Layout[] = []
+  layouts: LayoutDisplay[] = []
+
   constructor(private layoutService: LayoutService) { }
 
   ngOnInit(): void {
     this.layoutService.getLayouts()
+        .pipe(map(data => data.map((layout: Layout) => new LayoutDisplay(layout))))
         .subscribe(layouts => this.layouts = layouts)
   }
 
