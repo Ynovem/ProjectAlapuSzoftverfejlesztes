@@ -7,9 +7,9 @@
 				<div class="input-group-prepend">
 					<label class="input-group-text" for="layoutSelector">Layout</label>
 				</div>
-				<select class="custom-select" id="layoutSelector" [(ngModel)]="selectedSeatLayout">
+				<select class="custom-select" id="layoutSelector" [(ngModel)]="selectedLayout">
 					<option [ngValue]="null" disabled>Select Layout</option>
-					<option *ngFor="let layout of seatLayouts;" [ngValue]="layout">{{layout.name}}</option>
+					<option *ngFor="let layout of layouts;" [ngValue]="layout">{{layout.name}}</option>
 				</select>
 			</div>
 			<div class="input-group">
@@ -28,17 +28,19 @@
 				</fieldset>
 			</div>
 		</div>
+		<!--
 		<div class="col-sm">
 			<div class="input-group">
-				<div class="text-center" *ngIf="selectedSeatLayout">
-					<img [src]="selectedSeatLayout.thumbnail" alt="">
+				<div class="text-center" *ngIf="selectedLayout">
+					<img [src]="selectedLayout.thumbnail" alt="">
 				</div>
 			</div>
 		</div>
+		-->
 	</div>
 	<div class="row justify-content-md-center">
 		<div class="col-sm">
-			<button type="button" class="btn btn-secondary" (click)="solve()" [disabled]="seatLayouts == null || selectedSolver == null">Solve</button>
+			<button type="button" class="btn btn-secondary" (click)="solve()" [disabled]="!selectedLayout || !selectedSolver">Solve</button>
 		</div>
 	</div>
 </div>
