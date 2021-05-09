@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 
-import {LayoutService} from "../layout.service";
+import { LayoutService} from "../layout.service";
 
-import {ISeat, Metric, OptSeat, Seat} from '../seatmap';
+import { Metric, OptSeat } from '../seatmap';
 
 @Component({
   selector: 'app-designer',
