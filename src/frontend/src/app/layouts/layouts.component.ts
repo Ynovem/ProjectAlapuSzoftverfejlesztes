@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Layout, LayoutDisplay} from '../layout';
+
+import { map } from "rxjs/operators";
+
+import { Layout, LayoutDisplay } from '../layout';
 import { LayoutService } from '../layout.service';
-import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-layouts',
@@ -9,7 +11,6 @@ import {map} from "rxjs/operators";
   styleUrls: ['./layouts.component.scss']
 })
 export class LayoutsComponent implements OnInit {
-
   layouts: LayoutDisplay[] = []
 
   constructor(private layoutService: LayoutService) { }

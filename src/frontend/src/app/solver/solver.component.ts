@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {SeatLayout, Solver} from "../seatmap";
+import { SeatLayout, Solver } from "../seatmap";
 
 @Component({
   selector: 'app-solver',
