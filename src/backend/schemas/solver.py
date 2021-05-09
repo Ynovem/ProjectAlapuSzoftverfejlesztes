@@ -23,3 +23,7 @@ class SolverInDBBase(SolverBase):
 # Additional properties to return via API
 class Solver(SolverInDBBase):
     pass
+
+
+class SolverData(BaseModel):
+    layout_id: int

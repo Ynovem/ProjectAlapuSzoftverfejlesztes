@@ -19,4 +19,8 @@ export class SolverService {
   getSolvers(): Observable<any> {
     return this.http.get(SOLVER_API, httpOptions);
   }
+
+  solve(solver_id: number, body: any): Observable<any> {
+    return this.http.post(`${SOLVER_API}/${solver_id}`, body, httpOptions);
+  }
 }

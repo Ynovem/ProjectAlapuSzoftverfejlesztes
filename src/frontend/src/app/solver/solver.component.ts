@@ -49,6 +49,16 @@ export class SolverComponent implements OnInit {
   }
 
   solve() {
-    console.log("Solve-placeholder");
+    if (this.selectedLayout === null) {
+      return
+    }
+    if (this.selectedSolver === null) {
+      return
+    }
+    this.solverService.solve(this.selectedSolver.id, {
+      layout_id: this.selectedLayout.id
+    }).subscribe(data => {
+      console.log("Solve-placeholder", data);
+    })
   }
 }
