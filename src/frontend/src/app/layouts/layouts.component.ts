@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { map } from "rxjs/operators";
 
-import { Layout, LayoutDisplay } from '../layout';
-import { LayoutService } from '../layout.service';
+import { ILayout, LayoutDisplay } from '../_dtos/layout';
+import { LayoutService } from '../_services/layout.service';
 
 @Component({
   selector: 'app-layouts',
@@ -17,7 +17,7 @@ export class LayoutsComponent implements OnInit {
 
   ngOnInit(): void {
     this.layoutService.getLayouts()
-        .pipe(map(data => data.map((layout: Layout) => new LayoutDisplay(layout))))
+        .pipe(map(data => data.map((layout: ILayout) => new LayoutDisplay(layout))))
         .subscribe(layouts => this.layouts = layouts)
   }
 
