@@ -3,4 +3,5 @@ cmake-build-*
 
 .idea
 
+**/__pycache__/*
 **.sqlite
