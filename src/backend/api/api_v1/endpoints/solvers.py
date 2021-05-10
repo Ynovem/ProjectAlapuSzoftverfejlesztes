@@ -9,6 +9,8 @@ import crud
 import schemas
 from api import deps
 from schemas.solver import SolverData
+from solvers.first_free.first_free_solver import FirstFree
+
 
 router = APIRouter()
 
@@ -41,9 +43,5 @@ def solve_layout(
 
     print(f'Body: {layout}')
     print(f'Coords: {json.loads(layout.coords)}')
-
-    # return layout
-    return {
-        "name": "test",
-        "coords": "testtest",
-    }
+    algorithm = FirstFree()
+    return algorithm.solve(layout)
