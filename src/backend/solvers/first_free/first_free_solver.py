@@ -6,4 +6,4 @@ class FirstFree:
         self.layoutService = crudLayout
 
     def solve(self, layout: Layout):
-        return []
+        return { "name": "test", "coords": "Result"}
