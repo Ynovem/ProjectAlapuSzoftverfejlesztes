@@ -36,7 +36,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/backgroundAnimation.js"
+            ]
           },
           "configurations": {
             "production": {
