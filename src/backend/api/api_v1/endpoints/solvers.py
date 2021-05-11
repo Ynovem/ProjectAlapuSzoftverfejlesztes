@@ -10,7 +10,8 @@ import schemas
 from api import deps
 from schemas.solver import SolverData
 from solvers.first_free.first_free_solver import FirstFree
-
+from solvers.backtracking.backtracking_solver import Backtracking
+from solvers.maximal_independent_set.maximal_independent_set import MaximalIndependentSet
 
 router = APIRouter()
 
@@ -43,5 +44,12 @@ def solve_layout(
 
     print(f'Body: {layout}')
     print(f'Coords: {json.loads(layout.coords)}')
-    algorithm = FirstFree()
+    algorithm = Backtracking()
+    if solver_id == 1:
+        algorithm = Backtracking()
+    elif solver_id == 2:
+        algorithm = FirstFree()
+    elif solver_id == 3:
+        algorithm = MaximalIndependentSet()
+
     return algorithm.solve(layout)
