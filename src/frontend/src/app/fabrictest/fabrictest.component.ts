@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { fabric } from "fabric";
 
 @Component({
   selector: 'app-fabrictest',
@@ -7,6 +8,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 })
 export class FabrictestComponent implements OnInit, AfterViewInit {
   canvasId: string = "designer-canvas";
+  canvas?: fabric.Canvas;
 
   constructor() {
   }
