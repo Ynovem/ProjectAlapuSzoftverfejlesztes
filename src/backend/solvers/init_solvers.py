@@ -24,7 +24,12 @@ def init_db() -> None:
         schemas.Solver(
             name="Maximal Independent Set",
             description="Greedy algorithm from networkx python library, not solve maximum independent set problem.",
+        ),
+        schemas.Solver(
+            name="Minimum Degree",
+            description="Simple greedy algorithm, which runs in linear time.",
         )
+
     ]
     if len(solvers) == 0:
         for solver in default_solvers:
