@@ -11,6 +11,7 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { SolverComponent } from './solver/solver.component';
 import { DesignerComponent } from './designer/designer.component';
 import { LayoutsComponent } from './layouts/layouts.component';
+import { FabrictestComponent } from './fabrictest/fabrictest.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { LayoutsComponent } from './layouts/layouts.component';
     SolverComponent,
     DesignerComponent,
     LayoutsComponent,
+    FabrictestComponent,
   ],
   imports: [
     BrowserModule,
