@@ -1,87 +1,156 @@
-<p>Designer works!</p>
+<div class="container-fluid">
+  <div class="row justify-content-md-left editorContainer">
+    <div class="col-sm pr-0">
+      <app-fabric></app-fabric>
+    </div>
+    <div class="col-sm pl-0 toolboxContainer">
+      <div class="toolboxHeader">Tools</div>
+      <div class="toolboxBody container-fluid">
+        <div class="row justify-content-left">
+          <div class="col-sm-6">
+            <label class="col-form-label">Row count</label>
+          </div>
+          <div class="col-sm-6">
+            <input id="rowNumInput" type="number" min="0" class="form-control" placeholder=""
+                   aria-label="" aria-describedby="basic-addon1"
+                   [(ngModel)]="rowMetric.count"
+            >
+          </div>
+        </div>
+        <div class="row justify-content-md-left">
+          <div class="col-sm-6">
+            <label class="col-form-label">Column count</label>
+          </div>
+          <div class="col-sm-6">
+            <input id="colNumInput" type="number" min="0" class="form-control" placeholder=""
+                   aria-label="" aria-describedby="basic-addon1"
+                   [(ngModel)]="colMetric.count"
+            >
+          </div>
+        </div>
+        <div class="row justify-content-left">
+          <div class="col-sm-6">
+            <label class="col-form-label">Vertical distance</label>
+          </div>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <input type="number" min="0" class="form-control" placeholder=""
+                     aria-label="" aria-describedby="basic-addon1"
+                     [(ngModel)]="rowMetric.distance"
+              >
+              <div class="input-group-append">
+                <span class="input-group-text">cm</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label class="col-form-label">Horizontal distance</label>
+          </div>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <input type="number" min="0" class="form-control" placeholder=""
+                     aria-label="" aria-describedby="basic-addon1"
+                     [(ngModel)]="colMetric.distance"
+              >
+              <div class="input-group-append">
+                <span class="input-group-text">cm</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-right">
+          <div class="col-sm">
+            <button type="button" class="btn btn-secondary float-right mt-2" (click)="generateSeatMap()">Generate
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="container">
-	<div class="row justify-content-md-center">
-		<div class="col-sm">
-			<div class="input-group">
-				<span class="input-group-text">Name of layout</span>
-				<input type="text" class="form-control" placeholder="Name of layout"
-					   aria-label="" aria-describedby="basic-addon1"
-					   [(ngModel)]="name"
-				>
-			</div>
-		</div>
-	</div>
-	<div class="row justify-content-md-center">
-		<div class="col-sm">
-			<div class="input-group">
-				<span class="input-group-text">Number of rows</span>
-				<input type="number" min="0" class="form-control" placeholder=""
-					   aria-label="" aria-describedby="basic-addon1"
-					   [(ngModel)]="rowMetric.count"
-				>
-			</div>
-		</div>
-		<div class="col-sm">
-			<div class="input-group">
-				<span class="input-group-text">Number of cols</span>
-				<input type="number" min="0" class="form-control" placeholder=""
-					   aria-label="" aria-describedby="basic-addon1"
-					   [(ngModel)]="colMetric.count"
-				>
-			</div>
-		</div>
-	</div>
-	<div class="row justify-content-md-center">
-		<div class="col-sm">
-			<div class="input-group">
-				<span class="input-group-text">Distance of rows</span>
-				<input type="number" min="0" class="form-control" placeholder=""
-					   aria-label="" aria-describedby="basic-addon1"
-					   [(ngModel)]="rowMetric.distance"
-				>
-				<span class="input-group-text">cm</span>
-			</div>
-		</div>
-		<div class="col-sm">
-			<div class="input-group mb-3">
-				<span class="input-group-text">Distance of cols</span>
-				<input type="number" min="0" class="form-control" placeholder=""
-					   aria-label="" aria-describedby="basic-addon1"
-					   [(ngModel)]="colMetric.distance"
-				>
-				<span class="input-group-text">cm</span>
-			</div>
-		</div>
-	</div>
-	<div class="row justify-content-md-center">
-		<div class="col-sm">
-			<button (click)="generateSeatMap()">Generate</button>
-		</div>
-	</div>
+  <div class="row justify-content-md-center">
+    <div class="col-sm">
+      <div class="input-group">
+        <span class="input-group-text">Name of layout</span>
+        <input type="text" class="form-control" placeholder="Name of layout"
+               aria-label="" aria-describedby="basic-addon1"
+               [(ngModel)]="name"
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-md-center">
+    <div class="col-sm">
+      <div class="input-group">
+        <span class="input-group-text">Number of rows</span>
+        <input type="number" min="0" class="form-control" placeholder=""
+               aria-label="" aria-describedby="basic-addon1"
+               [(ngModel)]="rowMetric.count"
+        >
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="input-group">
+        <span class="input-group-text">Number of cols</span>
+        <input type="number" min="0" class="form-control" placeholder=""
+               aria-label="" aria-describedby="basic-addon1"
+               [(ngModel)]="colMetric.count"
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-md-center">
+    <div class="col-sm">
+      <div class="input-group">
+        <span class="input-group-text">Distance of rows</span>
+        <input type="number" min="0" class="form-control" placeholder=""
+               aria-label="" aria-describedby="basic-addon1"
+               [(ngModel)]="rowMetric.distance"
+        >
+        <span class="input-group-text">cm</span>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="input-group mb-3">
+        <span class="input-group-text">Distance of cols</span>
+        <input type="number" min="0" class="form-control" placeholder=""
+               aria-label="" aria-describedby="basic-addon1"
+               [(ngModel)]="colMetric.distance"
+        >
+        <span class="input-group-text">cm</span>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-md-center">
+    <div class="col-sm">
+      <button (click)="generateSeatMap()">Generate</button>
+    </div>
+  </div>
 
-	<div class="row justify-content-md-center">
-		<div class="col-sm d-flex justify-content-center">
-			<div class="table-responsive">
-				<table class="table table-bordered">
-					<tr *ngFor="let row of map">
-						<td *ngFor="let seat of row" [ngClass]="{'table-secondary': seat.disabled}">
-							[{{seat.x}};{{seat.y}}]
-							<button (click)="toggleSeat(seat)">x</button>
-						</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-	</div>
-	<div class="row justify-content-md-center">
-		<div class="col-sm">
-			<button (click)="getSeatDots()">Generate json [Save placeholder]</button>
-		</div>
-	</div>
-	<div class="row justify-content-md-center">
-		<div class="col-sm">
-			{{json|json}}
-		</div>
-	</div>
+  <div class="row justify-content-md-center">
+    <div class="col-sm d-flex justify-content-center">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <tr *ngFor="let row of map">
+            <td *ngFor="let seat of row" [ngClass]="{'table-secondary': seat.disabled}">
+              [{{seat.x}};{{seat.y}}]
+              <button (click)="toggleSeat(seat)">x</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-md-center">
+    <div class="col-sm">
+      <button (click)="getSeatDots()">Generate json [Save placeholder]</button>
+    </div>
+  </div>
+  <div class="row justify-content-md-center">
+    <div class="col-sm">
+      {{json|json}}
+    </div>
+  </div>
 </div>
