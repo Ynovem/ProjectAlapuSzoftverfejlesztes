@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row justify-content-md-left editorContainer">
     <div class="col-sm pr-0">
-      <app-fabric></app-fabric>
+      <canvas id="{{canvasId}}" class="canvas" width="1500" height="857"></canvas>
     </div>
     <div class="col-sm pl-0 toolboxContainer">
       <div class="toolboxHeader">Tools</div>
@@ -60,8 +60,19 @@
         </div>
         <div class="row justify-content-right">
           <div class="col-sm">
-            <button type="button" class="btn btn-secondary float-right mt-2" (click)="generateSeatMap()">Generate
+            <button type="button" class="btn btn-secondary float-right mt-2" (click)="generateSeats()">Generate
             </button>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="snaptoGridCheckbox" checked="checked"
+                     [(ngModel)]="snapToGrid"
+                     (change)="toggleSnapToGrid()">
+              <label class="custom-control-label" for="snaptoGridCheckbox">Snap to grid</label>
+            </div>
           </div>
         </div>
       </div>

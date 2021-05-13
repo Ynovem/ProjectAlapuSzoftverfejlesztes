@@ -23,3 +23,11 @@
   font-size: 14pt;
   border-radius: 0px 0px 10px 0px;
 }
+
+.canvas{
+  border: darkgray solid 1px;
+}
+
+.custom-control-label::before, label.custom-control-label::after {
+  top: 0.4rem;
+}
