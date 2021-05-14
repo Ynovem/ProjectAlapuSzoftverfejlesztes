@@ -12,6 +12,7 @@ import { SolverComponent } from './solver/solver.component';
 import {DesignerComponent } from './designer/designer.component';
 import { LayoutsComponent } from './layouts/layouts.component';
 import { FabricComponent } from './fabric/fabric.component';
+import { RulesComponent } from './rules/rules.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { FabricComponent } from './fabric/fabric.component';
     DesignerComponent,
     LayoutsComponent,
     FabricComponent,
+    RulesComponent,
   ],
   imports: [
     BrowserModule,
