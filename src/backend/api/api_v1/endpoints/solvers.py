@@ -1,5 +1,5 @@
 import json
-from typing import Any, List
+from typing import Any, List, Optional
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 import crud
 import schemas
 from api import deps
+from schemas import Rule, Layout
 from schemas.solver import SolverData
 from solvers.first_free.first_free_solver import FirstFree
 from solvers.backtracking.backtracking_solver import Backtracking
@@ -42,16 +43,24 @@ def solve_layout(
     print(f"Solve! {solver_id}")
     print(f'Body: {body}')
 
-    layout = crud.layout.get(db, id=body.layout_id)
+    rule: Optional[Rule] = crud.rule.get(db, id=body.rule_id)
+    if rule is None:
+        # TODO: Error handling
+        pass
+
+    layout: Optional[Layout] = crud.layout.get(db, id=body.layout_id)
+    if layout is None:
+        # TODO: Error handling
+        pass
 
     print(f'Body: {layout}')
     print(f'Name: {layout.name}')
     print(f'Coords: {json.loads(layout.coords)}')
-    algorithm = Backtracking()
+    algorithm = Backtracking(rule)
     if solver_id == 1:
-        algorithm = Backtracking()
+        algorithm = Backtracking(rule)
     elif solver_id == 2:
-        algorithm = FirstFree()
+        algorithm = FirstFree(rule)
     elif solver_id == 3:
         algorithm = MaximalIndependentSet()
     elif solver_id == 4:

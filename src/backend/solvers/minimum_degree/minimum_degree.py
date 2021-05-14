@@ -1,4 +1,4 @@
-from schemas import Layout
+from schemas import Layout, Rule
 from crud import layout as crudLayout
 from solvers.common.common import Common
 
@@ -9,7 +9,8 @@ DEFAULT_CONSTRAINT = 150
 
 
 class MinimumDegree:
-    def __init__(self):
+    def __init__(self, rule: Rule):
+        self.constraint = rule.limit
         self.layoutService = crudLayout
 
     def solve(self, layout: Layout):
@@ -17,7 +18,7 @@ class MinimumDegree:
         # num is same as index of array
         Common.add_num(seats)
         # create list of conflicting seats compared to the current one
-        Common.add_neighbors(seats, Common.get_edges(seats, DEFAULT_CONSTRAINT))
+        Common.add_neighbors(seats, Common.get_edges(seats, self.constraint))
 
         tmp = list(map(lambda x: copy.deepcopy(x), seats))
         # temporary list of forbidden seats

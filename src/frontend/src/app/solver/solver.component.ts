@@ -118,6 +118,9 @@ export class SolverComponent implements OnInit, AfterViewInit {
   }
 
   solve(): void {
+    if (this.selectedRule === null) {
+      return;
+    }
     if (this.selectedLayout === null) {
       return;
     }
@@ -125,10 +128,10 @@ export class SolverComponent implements OnInit, AfterViewInit {
       return;
     }
     this.solverService.solve(this.selectedSolver.id, {
-      layout_id: this.selectedLayout.id
-    }).subscribe(data => {
-      console.log('Solve-placeholder', data);
-      // this.fabricService.loadLayout(layout);
+      rule_id: this.selectedRule.id,
+      layout_id: this.selectedLayout.id,
+    }).subscribe(sovledLayout => {
+      this.fabricService.loadLayout(sovledLayout);
     });
   }
 

@@ -26,4 +26,5 @@ class Solver(SolverInDBBase):
 
 
 class SolverData(BaseModel):
-    solver_id: int
+    rule_id: int
+    layout_id: int
