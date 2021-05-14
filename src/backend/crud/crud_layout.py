@@ -16,7 +16,6 @@ class CRUDLayout:
         return db.query(Layout).offset(skip).limit(limit).all()
 
     def create(self, db: Session, *, obj_in: LayoutCreate) -> Layout:
-        # pass
         db_obj = Layout(
             name=obj_in.name,
             coords=obj_in.coords,
