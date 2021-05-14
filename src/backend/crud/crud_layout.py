@@ -6,7 +6,6 @@ from models.layout import Layout
 from schemas.layout import LayoutCreate
 
 
-# class CRUDUser(CRUDBase[Layout, LayoutCreate]):
 class CRUDLayout:
     def get(self, db: Session, id: int) -> Optional[Layout]:
         return db.query(Layout).filter(Layout.id == id).first()

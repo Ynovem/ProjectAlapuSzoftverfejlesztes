@@ -1,9 +1,6 @@
 ### Install dependencies
 `pipenv install`
 
-### Prepare database
-`pipenv run python prepare_db.py`
-
 ### Run server
 `pipenv run uvicorn main:app --reload`
 
