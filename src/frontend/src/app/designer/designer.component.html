@@ -59,109 +59,49 @@
           </div>
         </div>
         <div class="row justify-content-right">
-          <div class="col-sm">
+          <div class="col">
+            <button type="button" class="btn btn-danger float-left mt-2" (click)="generateSeats()">Reset
+            </button>
+          </div>
+          <div class="col-8">
             <button type="button" class="btn btn-secondary float-right mt-2" (click)="generateSeats()">Generate
+            </button>
+            <button type="button" class="btn btn-secondary float-right mt-2 mr-2" (click)="generateSeats()">Add seat
             </button>
           </div>
         </div>
         <hr>
-        <div class="row">
-          <div class="col">
+        <div class="row justify-content-left">
+          <div class="col-sm">
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="snaptoGridCheckbox" checked="checked"
                      [(ngModel)]="snapToGrid"
                      (change)="toggleSnapToGrid()">
               <label class="custom-control-label" for="snaptoGridCheckbox">Snap to grid</label>
             </div>
+            <p class="Usage mt-5 mb-0 pb-0 description">
+              Usage:
+            </p>
+            <p class="mt-0 mb-0 pb-0 description">
+              Scroll wheel to zoom in / out
+            </p>
+            <p class="mt-0 mb-0 pb-0 description">
+              Alt + mouse drag to move the view
+            </p>
+          </div>
+        </div>
+        <hr>
+        <div class="row justify-content-left">
+          <div class="col-sm">
+            <div class="form-group">
+              <label for="layoutNameTextbox">Layout name</label>
+              <input type="email" class="form-control" id="layoutNameTextbox" placeholder="Enter a name...">
+            </div>
+            <button type="button" class="btn btn-primary mt-2 float-right" (click)="saveLayout('test')">Save layout
+            </button>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="row justify-content-md-center">
-    <div class="col-sm">
-      <div class="input-group">
-        <span class="input-group-text">Name of layout</span>
-        <input type="text" class="form-control" placeholder="Name of layout"
-               aria-label="" aria-describedby="basic-addon1"
-               [(ngModel)]="name"
-        >
-      </div>
-    </div>
-  </div>
-  <div class="row justify-content-md-center">
-    <div class="col-sm">
-      <div class="input-group">
-        <span class="input-group-text">Number of rows</span>
-        <input type="number" min="0" class="form-control" placeholder=""
-               aria-label="" aria-describedby="basic-addon1"
-               [(ngModel)]="rowMetric.count"
-        >
-      </div>
-    </div>
-    <div class="col-sm">
-      <div class="input-group">
-        <span class="input-group-text">Number of cols</span>
-        <input type="number" min="0" class="form-control" placeholder=""
-               aria-label="" aria-describedby="basic-addon1"
-               [(ngModel)]="colMetric.count"
-        >
-      </div>
-    </div>
-  </div>
-  <div class="row justify-content-md-center">
-    <div class="col-sm">
-      <div class="input-group">
-        <span class="input-group-text">Distance of rows</span>
-        <input type="number" min="0" class="form-control" placeholder=""
-               aria-label="" aria-describedby="basic-addon1"
-               [(ngModel)]="rowMetric.distance"
-        >
-        <span class="input-group-text">cm</span>
-      </div>
-    </div>
-    <div class="col-sm">
-      <div class="input-group mb-3">
-        <span class="input-group-text">Distance of cols</span>
-        <input type="number" min="0" class="form-control" placeholder=""
-               aria-label="" aria-describedby="basic-addon1"
-               [(ngModel)]="colMetric.distance"
-        >
-        <span class="input-group-text">cm</span>
-      </div>
-    </div>
-  </div>
-  <div class="row justify-content-md-center">
-    <div class="col-sm">
-      <button (click)="generateSeatMap()">Generate</button>
-    </div>
-  </div>
-
-  <div class="row justify-content-md-center">
-    <div class="col-sm d-flex justify-content-center">
-      <div class="table-responsive">
-        <table class="table table-bordered">
-          <tr *ngFor="let row of map">
-            <td *ngFor="let seat of row" [ngClass]="{'table-secondary': seat.disabled}">
-              [{{seat.x}};{{seat.y}}]
-              <button (click)="toggleSeat(seat)">x</button>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div class="row justify-content-md-center">
-    <div class="col-sm">
-      <button (click)="getSeatDots()">Generate json [Save placeholder]</button>
-    </div>
-  </div>
-  <div class="row justify-content-md-center">
-    <div class="col-sm">
-      {{json|json}}
     </div>
   </div>
 </div>

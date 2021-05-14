@@ -156,4 +156,8 @@ export class DesignerComponent implements OnInit, AfterViewInit{
     console.log(this.snapToGrid);
     this.fabricService.SnapToGrid = this.snapToGrid;
   }
+
+  saveLayout(name: string): void {
+    this.fabricService.saveLayout(name);
+  }
 }

@@ -2,6 +2,7 @@ import {Injectable, NgZone} from '@angular/core';
 
 import { fabric } from 'fabric';
 import {IEvent, Point} from 'fabric/fabric-impl';
+import {Layout} from '../_dtos/layout';
 
 export class POINT {
   x: number;
@@ -12,6 +13,18 @@ export class POINT {
     this.y = y;
   }
 }
+
+class Seat{
+  x: number;
+  y: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +33,7 @@ export class FabricService {
   protected width = 0;
   protected height = 0;
   protected cellSize = 10;
+  protected seatSize = 40;
   private isDragging = false;
   private isHovering = false;
   private lastPosX = -1;
@@ -82,6 +96,64 @@ export class FabricService {
       if (!this.canvas) { return; }
       this.canvas.remove(obj);
     });
+  }
+
+  getSeatData(): string{
+    let minX = this.width * 2;
+    let minY = this.height * 2;
+    const seats: Seat[] = [];
+    const objects = this.canvas?.getObjects().filter(obj => obj.type === 'rect');
+    objects?.forEach(obj => {
+      if (obj.left && obj.top) {
+      if (obj.left < minX) {
+        minX = obj.left;
+      }
+      if (obj.top < minY) {
+        minY = obj.top;
+      }
+      }
+    });
+
+    objects?.forEach(obj => {
+      if (obj.left && obj.top) {
+        seats.push(new Seat(obj.left - minX, obj.top - minY));
+      }
+    });
+    console.log(seats);
+    return JSON.stringify(seats);
+  }
+
+  countColumnsLeft(x: number, objects: fabric.Object[]): number{
+    let count = 0;
+    const uniqueNums: number[] = [];
+    objects?.forEach(obj => {
+      if (obj.left && obj.left < x && !uniqueNums.includes(obj.left)) {
+        count++;
+        uniqueNums.push(obj.left);
+      }
+    });
+    return count;
+  }
+
+  countRowsAbove(y: number, objects: fabric.Object[]): number{
+    let count = 0;
+    const uniqueNums: number[] = [];
+    objects?.forEach(obj => {
+      if (obj.top && obj.top < y && !uniqueNums.includes(obj.top)) {
+        count++;
+        uniqueNums.push(obj.top);
+      }
+    });
+    return count;
+  }
+
+  saveLayout(layoutName: string): Layout{
+    const id = 0;
+    const name = layoutName;
+    const created = new Date().toString();
+    const coords = this.getSeatData();
+
+    return new Layout({id, name, coords, created});
   }
 
   generateSeats(rows: number, cols: number, distanceX: number, distanceY: number, seatSize: number): void{
@@ -290,14 +362,10 @@ export class FabricService {
       const object = event.target;
       if (!object || !object.top || !object.left) { return; }
       if (object.top % this.cellSize !== 0 || object.left % this.cellSize !== 0){
-        object.top = this.roundWhenNearEdge(object.top / this.cellSize) * this.cellSize;
-        object.left = this.roundWhenNearEdge(object.left / this.cellSize) * this.cellSize;
+        object.top = Math.round(object.top / this.cellSize) * this.cellSize;
+        object.left = Math.round(object.left / this.cellSize) * this.cellSize;
       }
       object.setCoords();
     });
-  }
-
-  roundWhenNearEdge(num: number): number {
-    if (num % 1 >= 0.75) { return Math.round(num); } else { return Math.floor(num); }
   }
 }
