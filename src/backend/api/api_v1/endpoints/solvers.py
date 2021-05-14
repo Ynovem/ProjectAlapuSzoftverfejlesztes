@@ -12,6 +12,7 @@ from schemas.solver import SolverData
 from solvers.first_free.first_free_solver import FirstFree
 from solvers.backtracking.backtracking_solver import Backtracking
 from solvers.maximal_independent_set.maximal_independent_set import MaximalIndependentSet
+from solvers.minimum_degree.minimum_degree import MinimumDegree
 
 router = APIRouter()
 
@@ -51,5 +52,7 @@ def solve_layout(
         algorithm = FirstFree()
     elif solver_id == 3:
         algorithm = MaximalIndependentSet()
+    elif solver_id == 4:
+        algorithm = MinimumDegree()
 
     return algorithm.solve(layout)

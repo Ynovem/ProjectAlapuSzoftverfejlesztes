@@ -3,7 +3,6 @@ from crud import layout as crudLayout
 from solvers.common.common import Common
 
 import json
-import numpy as np
 
 DEFAULT_CONSTRAINT = 150
 
