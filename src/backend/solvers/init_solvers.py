@@ -16,6 +16,10 @@ def init_db() -> None:
         schemas.Solver(
             name="Backtracking",
             description="Backtracking algorithm, very resource intensive but can guarantee the optimal solution",
+        ),
+        schemas.Solver(
+            name="First Free",
+            description="Simple greedy algorithm, which runs in linear time.",
         )
     ]
     if len(solvers) == 0:
