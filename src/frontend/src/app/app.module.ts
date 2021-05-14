@@ -21,6 +21,7 @@ import { SeatmapComponent } from './seatmap/seatmap.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { SolverComponent } from './solver/solver.component';
 import { DesignerComponent } from './designer/designer.component';
+import { LayoutsComponent } from './layouts/layouts.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { DesignerComponent } from './designer/designer.component';
     LandingPageComponent,
     SolverComponent,
     DesignerComponent,
+    LayoutsComponent,
   ],
   imports: [
     BrowserModule,
