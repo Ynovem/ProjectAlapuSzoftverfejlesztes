@@ -17,10 +17,18 @@ export class POINT {
 class Seat{
   x: number;
   y: number;
+  busy: boolean;
 
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
+    this.busy = false;
+  }
+
+  distance(seat: Seat): number{
+    const tmpX = (this.x - seat.x);
+    const tmpY = (this.y - seat.y);
+    return Math.sqrt(tmpX * tmpX + tmpY * tmpY);
   }
 }
 
@@ -39,6 +47,7 @@ export class FabricService {
   private lastPosX = -1;
   private lastPosY = -1;
   private snapToGrid = true;
+  private clipboard: any;
 
   constructor(protected ngZone: NgZone) {
     fabric.Group.prototype.lockScalingX = true;
@@ -90,17 +99,25 @@ export class FabricService {
     this.snapToGrid = value;
   }
 
-  public clear(): void {
+  public clear(drawCanvas: boolean): void {
     if (!this.canvas) { return; }
     this.canvas.getObjects().filter(obj => obj.evented === true).forEach(obj => {
       if (!this.canvas) { return; }
       this.canvas.remove(obj);
     });
+    const vpt = this.canvas.viewportTransform;
+    if (vpt){
+      vpt[4] = 0;
+      vpt[5] = 0;
+    }
+    this.canvas.setZoom(1);
+    if (drawCanvas) { this.canvas.renderAll(); }
   }
 
   getSeatData(): string{
     let minX = this.width * 2;
     let minY = this.height * 2;
+    const tempSeats: Seat[] = [];
     const seats: Seat[] = [];
     const objects = this.canvas?.getObjects().filter(obj => obj.type === 'rect');
     objects?.forEach(obj => {
@@ -119,46 +136,97 @@ export class FabricService {
         seats.push(new Seat(obj.left - minX, obj.top - minY));
       }
     });
+
+    objects?.forEach(obj => {
+      if (obj.left && obj.top) {
+        seats.push(new Seat(obj.left - minX, obj.top - minY));
+      }
+    });
     console.log(seats);
     return JSON.stringify(seats);
-  }
-
-  countColumnsLeft(x: number, objects: fabric.Object[]): number{
-    let count = 0;
-    const uniqueNums: number[] = [];
-    objects?.forEach(obj => {
-      if (obj.left && obj.left < x && !uniqueNums.includes(obj.left)) {
-        count++;
-        uniqueNums.push(obj.left);
-      }
-    });
-    return count;
-  }
-
-  countRowsAbove(y: number, objects: fabric.Object[]): number{
-    let count = 0;
-    const uniqueNums: number[] = [];
-    objects?.forEach(obj => {
-      if (obj.top && obj.top < y && !uniqueNums.includes(obj.top)) {
-        count++;
-        uniqueNums.push(obj.top);
-      }
-    });
-    return count;
   }
 
   saveLayout(layoutName: string): Layout{
     const id = 0;
     const name = layoutName;
-    const created = new Date().toString();
+    const created = '';
     const coords = this.getSeatData();
 
     return new Layout({id, name, coords, created});
   }
 
-  generateSeats(rows: number, cols: number, distanceX: number, distanceY: number, seatSize: number): void{
+  addSeat(): void {
     if (!this.canvas) { return; }
-    this.clear();
+    const seat = new fabric.Rect({
+      width: this.seatSize,
+      height: this.seatSize,
+      fill: '#ffda79',
+      hasBorders: true,
+      stroke : '#ccae62',
+      strokeWidth : 1,
+      opacity: 1,
+      lockScalingX: true,
+      lockScalingY: true,
+      top: 10,
+      left: 10
+    });
+    this.canvas.add(seat);
+    this.canvas.setActiveObject(seat);
+    this.canvas.renderAll();
+  }
+
+  Delete(): void {
+    if (!this.canvas) { return; }
+    if (!this.canvas.getActiveObjects()) { return; }
+    this.canvas.getActiveObjects().forEach(obj => {
+      this.canvas?.remove(obj);
+    });
+    this.canvas.discardActiveObject();
+    this.canvas.renderAll();
+  }
+
+  Copy(): void{
+    if (!this.canvas) { return; }
+    this.canvas.getActiveObject().clone((cloned: any)  => {
+      this.clipboard = cloned;
+    });
+  }
+
+  Paste(): void{
+    this.clipboard.clone((clonedObj: any) => {
+      if (!this.canvas) { return; }
+      this.canvas.discardActiveObject();
+      clonedObj.set({
+        left: clonedObj.left + 50,
+        top: clonedObj.top + 50,
+        evented: true,
+      });
+      if (clonedObj.type === 'activeSelection') {
+        // active selection needs a reference to the canvas.
+        clonedObj.canvas = this.canvas;
+        clonedObj.forEachObject((obj: any) => {
+          if (!this.canvas) { return; }
+          this.canvas.add(obj);
+        });
+        // this should solve the unselectability
+        clonedObj.setCoords();
+      } else {
+        this.canvas.add(clonedObj);
+      }
+      this.clipboard.top += 50;
+      this.clipboard.left += 50;
+      this.canvas.setActiveObject(clonedObj);
+      this.canvas.requestRenderAll();
+    });
+  }
+
+  generateSeats(rows: number, cols: number, distanceX: number, distanceY: number, seatSize: number): boolean{
+    if ((rows - 1) * (distanceY + this.seatSize) + this.seatSize > this.height * 2 - 20 ||
+        (cols - 1) * (distanceX + this.seatSize) + this.seatSize > this.width * 2 - 20 ){
+      return false;
+    }
+    if (!this.canvas) { return false; }
+    this.clear(false);
     for (let row = 0; row < rows; row++){
       for (let col = 0; col < cols; col++){
         const seat = new fabric.Rect({
@@ -178,6 +246,7 @@ export class FabricService {
       }
     }
     this.canvas.renderAll();
+    return true;
   }
 
   drawGrid(): void {

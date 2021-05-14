@@ -1,3 +1,5 @@
+<ngb-alert class="alert alert-danger" *ngIf="!generateAlertClosed" (close)="generateAlertClosed = true">There's not enough space on the canvas for this configuration!</ngb-alert>
+
 <div class="container-fluid">
   <div class="row justify-content-md-left editorContainer">
     <div class="col-sm pr-0">
@@ -60,13 +62,13 @@
         </div>
         <div class="row justify-content-right">
           <div class="col">
-            <button type="button" class="btn btn-danger float-left mt-2" (click)="generateSeats()">Reset
+            <button type="button" class="btn btn-danger float-left mt-2" (click)="resetCanvas()">Reset
             </button>
           </div>
           <div class="col-8">
             <button type="button" class="btn btn-secondary float-right mt-2" (click)="generateSeats()">Generate
             </button>
-            <button type="button" class="btn btn-secondary float-right mt-2 mr-2" (click)="generateSeats()">Add seat
+            <button type="button" class="btn btn-secondary float-right mt-2 mr-2" (click)="addSeat()">Add seat
             </button>
           </div>
         </div>
@@ -79,7 +81,7 @@
                      (change)="toggleSnapToGrid()">
               <label class="custom-control-label" for="snaptoGridCheckbox">Snap to grid</label>
             </div>
-            <p class="Usage mt-5 mb-0 pb-0 description">
+            <p class="usage mt-5 mb-0 pb-0 description">
               Usage:
             </p>
             <p class="mt-0 mb-0 pb-0 description">
@@ -87,6 +89,15 @@
             </p>
             <p class="mt-0 mb-0 pb-0 description">
               Alt + mouse drag to move the view
+            </p>
+            <p class="mt-0 mb-0 pb-0 description">
+              Ctrl + C to copy selected
+            </p>
+            <p class="mt-0 mb-0 pb-0 description">
+              Ctrl + V to paste selected
+            </p>
+            <p class="mt-0 mb-0 pb-0 description">
+              Delete or del to remove selected
             </p>
           </div>
         </div>

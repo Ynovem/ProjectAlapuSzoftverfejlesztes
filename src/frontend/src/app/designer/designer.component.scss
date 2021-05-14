@@ -33,9 +33,20 @@
 }
 
 .usage{
-  font-size: 18pt;
+  font-size: 16pt;
+  font-weight: bold;
 }
 
 .description{
   color: gray;
+}
+
+.alert{
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 1000;
+  -webkit-box-shadow: 2px 2px 3px 0px rgba(0,0,0,0.5);
+  box-shadow: 2px 2px 3px 0px rgba(0,0,0,0.5);
 }

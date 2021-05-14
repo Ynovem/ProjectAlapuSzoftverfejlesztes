@@ -1,6 +1,6 @@
 import {
   AfterViewInit,
-  Component, ElementRef, HostListener,
+  Component, ElementRef,
   Input, NgZone,
   OnInit,
 } from '@angular/core';
@@ -18,6 +18,7 @@ import {fabric} from 'fabric';
 })
 export class DesignerComponent implements OnInit, AfterViewInit{
   canvasId = 'designer-canvas';
+  generateAlertClosed = true;
   map: OptSeat[][] = [];
   name = '';
   json: object[] = [];
@@ -31,7 +32,8 @@ export class DesignerComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit(): void
-  {}
+  {
+  }
 
   ngAfterViewInit(): void {
     this.fabricService.Canvas = new fabric.Canvas(this.canvasId, {
@@ -103,6 +105,29 @@ export class DesignerComponent implements OnInit, AfterViewInit{
         });
       });
 
+    window
+      .addEventListener('copy', (event: Event) => {
+        this.ngZone.runOutsideAngular( () => {
+          this.fabricService.Copy();
+        });
+      });
+
+    window
+      .addEventListener('paste', (event: Event) => {
+        this.ngZone.runOutsideAngular( () => {
+          this.fabricService.Paste();
+        });
+      });
+
+    window
+      .addEventListener('keydown', (event: KeyboardEvent) => {
+        if (event.key === 'Delete' || event.key === ',') {
+          this.ngZone.runOutsideAngular(() => {
+            this.fabricService.Delete();
+          });
+        }
+      });
+
     this.fabricService.drawGrid();
   }
 
@@ -149,7 +174,11 @@ export class DesignerComponent implements OnInit, AfterViewInit{
   }
 
   generateSeats(): void {
-    this.fabricService.generateSeats(this.rowMetric.count, this.colMetric.count, this.colMetric.distance, this.rowMetric.distance, 40);
+    const success = this.fabricService.generateSeats(this.rowMetric.count, this.colMetric.count,
+                    this.colMetric.distance, this.rowMetric.distance, 40);
+    if (!success){
+      this.generateAlertClosed = false;
+    }
   }
 
   toggleSnapToGrid(): void {
@@ -159,5 +188,13 @@ export class DesignerComponent implements OnInit, AfterViewInit{
 
   saveLayout(name: string): void {
     this.fabricService.saveLayout(name);
+  }
+
+  resetCanvas(): void {
+    this.fabricService.clear(true);
+  }
+
+  addSeat(): void{
+    this.fabricService.addSeat();
   }
 }
