@@ -28,6 +28,10 @@ def init_db() -> None:
         schemas.Solver(
             name="Minimum Degree",
             description="Simple greedy algorithm, which runs in linear time.",
+        ),
+        schemas.Solver(
+            name="Forward Selection",
+            description="In the first step algorithm splits into parts the searching problem, then step by step generates possible solution on bigger and bigger parts.",
         )
 
     ]

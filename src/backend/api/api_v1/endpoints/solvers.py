@@ -13,6 +13,7 @@ from solvers.first_free.first_free_solver import FirstFree
 from solvers.backtracking.backtracking_solver import Backtracking
 from solvers.maximal_independent_set.maximal_independent_set import MaximalIndependentSet
 from solvers.minimum_degree.minimum_degree import MinimumDegree
+from  solvers.forward_selection.forward_selection import ForwardSelection
 
 router = APIRouter()
 
@@ -54,5 +55,7 @@ def solve_layout(
         algorithm = MaximalIndependentSet()
     elif solver_id == 4:
         algorithm = MinimumDegree()
+    elif solver_id == 5:
+        algorithm = ForwardSelection()
 
     return algorithm.solve(layout)
