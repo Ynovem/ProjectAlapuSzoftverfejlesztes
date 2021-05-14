@@ -1,10 +1,64 @@
 .logo {
-  margin-top: 5em;
-  margin-bottom: 5em;
+  position: relative;
+  margin: 2em auto;
+  //margin: 2em;
+  background: url('../../assets/img/logo.png') bottom;
+  width: 500px;
+  height: 500px;
 }
+
 .logo-text {
-  font-size: 5em;
-  font-weight: bolder;
-  text-shadow: 0.05em 0.05em 0.02em #848484;
-  color: #5e585c;
+  margin-top: 0.1em;
+  font: bold 7em arial, sans-serif;
+  background-color: #565656;
+  color: transparent;
+  text-shadow: 2px 2px 3px rgba(255,255,255,0.5);
+  -webkit-background-clip: text;
+  white-space: nowrap;
+}
+
+.logo-text:after {
+  content:' ';
+  position: absolute;
+  display:block;
+  width: 97%;
+  border:2px solid rgb(171,171,171);
+  border-radius:4px;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+  box-shadow: 0 4px 10px 0 rgba(0,0,0,0.1);
+  -webkit-box-shadow: 0 4px 10px 0 rgba(0,0,0,0.1);
+  -moz-box-shadow: 0 4px 10px 0 rgba(0,0,0,0.1);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.logo{
+  margin-top: 3em;
+}
+
+.logo:after {
+  content: "";
+  position: absolute;
+  background: url('../../assets/img/logo.png') no-repeat 0px -310px;
+  display: block;
+  width: 500px;
+  height: 200px;
+  bottom: -195px;
+  transform: rotate(180deg);
+  mask-image:
+    radial-gradient(ellipse at bottom, rgba(0, 0, 0, 0.8) 0, rgba(0, 0, 0, 0) 70%);
+  -webkit-filter: blur(4px);
+}
+
+.backgroundAnimation{
+  position: fixed;
+  display:block;
+  top: 205px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+  width: 97%;
+  margin: 0;
+  padding: 0;
 }
