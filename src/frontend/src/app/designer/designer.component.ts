@@ -10,6 +10,7 @@ import { LayoutService} from '../_services/layout.service';
 import { Metric, OptSeat } from '../_dtos/seatmap';
 import {FabricService} from '../_services/fabric.service';
 import {fabric} from 'fabric';
+import {Layout} from "../_dtos/layout";
 
 @Component({
   selector: 'app-designer',
@@ -145,9 +146,12 @@ export class DesignerComponent implements OnInit, AfterViewInit{
     this.fabricService.SnapToGrid = this.snapToGrid;
   }
 
-  saveLayout(name: string): void {
-    // A lenti függvény visszaadja a paraméterezett Layout class-t
-    this.fabricService.saveLayout(name);
+  saveLayout(): void {
+    const savableLayout: Layout = this.fabricService.saveLayout(this.name);
+    savableLayout.coords = JSON.stringify(savableLayout.coords);
+    this.layoutService.saveLayout(savableLayout).subscribe(data => {
+      console.log(data);
+    })
   }
 
   resetCanvas(): void {
