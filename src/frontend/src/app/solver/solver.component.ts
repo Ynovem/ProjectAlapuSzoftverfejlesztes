@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { SeatLayout, Solver } from "../seatmap";
+import { map } from "rxjs/operators";
+
+import { ILayout, Layout } from "../_dtos/layout"
+import { Solver } from "../_dtos/solver"
+
+import { LayoutService } from "../_services/layout.service";
+import { SolverService } from "../_services/solver.service";
 
 @Component({
   selector: 'app-solver',
@@ -7,13 +13,22 @@ import { SeatLayout, Solver } from "../seatmap";
   styleUrls: ['./solver.component.scss']
 })
 export class SolverComponent implements OnInit {
-  solvers: Solver[];
-  seatLayouts: SeatLayout[];
+  layouts: ILayout[] = [];
+  solvers: Solver[] = [];
 
   selectedSolver: Solver | null = null;
-  selectedSeatLayout: SeatLayout | null = null;
+  selectedLayout: ILayout | null = null;
 
-  constructor() {
+  constructor(
+      private layoutService: LayoutService,
+      private solverService: SolverService,
+  ) {
+    this.layoutService.getLayouts()
+        .pipe(map(data => data.map((layout: ILayout) => new Layout(layout))))
+        .subscribe(layouts => this.layouts = layouts)
+    this.solverService.getSolvers()
+        .subscribe(solvers => this.solvers = solvers)
+    /*
     this.solvers = [
         new Solver(1, "Backtracking", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n"),
         new Solver(2, "Algorithm 1", "desc 1"),
@@ -27,12 +42,23 @@ export class SolverComponent implements OnInit {
       new SeatLayout(4, "Layout 4", [], "assets/thumbnails/sample.png"),
       new SeatLayout(5, "Layout 5", [], "assets/thumbnails/sample.png"),
     ];
+    */
   }
 
   ngOnInit(): void {
   }
 
   solve() {
-    console.log("Solve-placeholder");
+    if (this.selectedLayout === null) {
+      return
+    }
+    if (this.selectedSolver === null) {
+      return
+    }
+    this.solverService.solve(this.selectedSolver.id, {
+      layout_id: this.selectedLayout.id
+    }).subscribe(data => {
+      console.log("Solve-placeholder", data);
+    })
   }
 }
