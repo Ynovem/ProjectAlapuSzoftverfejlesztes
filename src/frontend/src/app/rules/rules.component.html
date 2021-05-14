@@ -1,20 +1,55 @@
 <h2>Rules</h2>
 
-<table class="table table-striped layout">
-	<thead>
-	<tr>
-		<th scope="col">#</th>
-		<th scope="col">name</th>
-		<th scope="col">creation</th>
-		<th scope="col">number of coords</th>
-		<th scope="col">coords (json)</th>
-	</tr>
-	</thead>
-	<tbody>
-	<tr *ngFor="let rule of rules">
-		<th scope="row">{{rule.id}}</th>
-		<td>{{rule.name}}</td>
-		<td>{{rule.limit}}</td>
-	</tr>
-	</tbody>
-</table>
+
+<div class="container">
+	<div class="row justify-content-left">
+		<div class="col-sm-6">
+			<label class="col-form-label">Name</label>
+		</div>
+		<div class="col-sm-6">
+			<input id="nameInput" type="text" class="form-control" placeholder=""
+				   aria-label="" aria-describedby="basic-addon1"
+				   [(ngModel)]="newRule.name"
+			>
+		</div>
+	</div>
+	<div class="row justify-content-left">
+		<div class="col-sm-6">
+			<label class="col-form-label">Limit</label>
+		</div>
+		<div class="col-sm-6">
+			<input id="limitInput" type="number" min="0" class="form-control" placeholder=""
+				   aria-label="" aria-describedby="basic-addon1"
+				   [(ngModel)]="newRule.limit"
+			>
+		</div>
+	</div>
+	<div class="row justify-content-left">
+		<div class="col-sm">
+			<button type="button" class="btn btn-primary mt-2 float-right" (click)="saveRule()">
+				Save rule
+			</button>
+		</div>
+	</div>
+	<br>
+	<div class="row justify-content-left">
+		<div class="col-sm">
+			<table class="table table-striped rule">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">name</th>
+						<th scope="col">limit (cm)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let rule of rules">
+						<th scope="row">{{rule.id}}</th>
+						<td>{{rule.name}}</td>
+						<td>{{rule.limit}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

@@ -4,12 +4,14 @@ import { LandingPageComponent } from "./landing-page/landing-page.component";
 import { SolverComponent } from "./solver/solver.component";
 import { DesignerComponent } from "./designer/designer.component";
 import { LayoutsComponent } from "./layouts/layouts.component";
+import { RulesComponent } from "./rules/rules.component";
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'layouts', component: LayoutsComponent },
   { path: 'designer', component: DesignerComponent },
   { path: 'solver', component: SolverComponent },
+  { path: 'rules', component: RulesComponent },
   { path: '', redirectTo: '/', pathMatch: 'full' },
 ];
 

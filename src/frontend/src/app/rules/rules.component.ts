@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
-class Rule {
-  constructor(public id: number, public name: string, public limit: number)
-  {
-  }
-}
+import { RuleBase, Rule } from '../_dtos/rule';
+import { RuleService } from '../_services/rule.service';
 
 @Component({
   selector: 'app-rules',
@@ -12,13 +8,26 @@ class Rule {
   styleUrls: ['./rules.component.scss']
 })
 export class RulesComponent implements OnInit {
-  rules: Rule[] = []
+  rules: Rule[] = [];
+  newRule: RuleBase;
 
-  constructor() { }
+  constructor(private ruleService: RuleService) {
+    this.newRule = new RuleBase();
+  }
 
   ngOnInit(): void {
-    this.rules = [
-        new Rule(1, "Standard covid rules - 15cm", 150),
-    ]
+    this.getRules();
+  }
+
+  getRules(): void {
+    this.ruleService.getRules()
+        .subscribe(rules => this.rules = rules);
+  }
+
+  saveRule(): void {
+    this.ruleService.saveRule(this.newRule).subscribe(data => {
+      this.getRules();
+      console.log(data);
+    });
   }
 }
