@@ -19,10 +19,10 @@ class Seat{
   y: number;
   busy: boolean;
 
-  constructor(x: number, y: number) {
+  constructor(x: number, y: number, busy: boolean) {
     this.x = x;
     this.y = y;
-    this.busy = false;
+    this.busy = busy;
   }
 
   distance(seat: Seat): number{
@@ -117,7 +117,6 @@ export class FabricService {
   getSeatData(): string{
     let minX = this.width * 2;
     let minY = this.height * 2;
-    const tempSeats: Seat[] = [];
     const seats: Seat[] = [];
     const objects = this.canvas?.getObjects().filter(obj => obj.type === 'rect');
     objects?.forEach(obj => {
@@ -133,16 +132,9 @@ export class FabricService {
 
     objects?.forEach(obj => {
       if (obj.left && obj.top) {
-        seats.push(new Seat(obj.left - minX, obj.top - minY));
+        seats.push(new Seat(obj.left - minX, obj.top - minY, false));
       }
     });
-
-    objects?.forEach(obj => {
-      if (obj.left && obj.top) {
-        seats.push(new Seat(obj.left - minX, obj.top - minY));
-      }
-    });
-    console.log(seats);
     return JSON.stringify(seats);
   }
 

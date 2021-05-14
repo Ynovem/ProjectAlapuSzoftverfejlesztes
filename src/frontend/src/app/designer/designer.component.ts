@@ -36,15 +36,17 @@ export class DesignerComponent implements OnInit, AfterViewInit{
   }
 
   ngAfterViewInit(): void {
-    this.fabricService.Canvas = new fabric.Canvas(this.canvasId, {
-      imageSmoothingEnabled: false,
-      backgroundColor: '#fff',
-      renderOnAddRemove: false,
-      selectionColor: 'rgba(116, 185, 255, 0.1)',
-      selectionBorderColor: 'rgba(6, 89, 153, 0.7)',
-      selectionLineWidth: 1.5,
-      selectionDashArray: [10, 5],
-      notAllowedCursor: 'default'
+    this.ngZone.runOutsideAngular( () => {
+      this.fabricService.Canvas = new fabric.Canvas(this.canvasId, {
+        imageSmoothingEnabled: false,
+        backgroundColor: '#fff',
+        renderOnAddRemove: false,
+        selectionColor: 'rgba(116, 185, 255, 0.1)',
+        selectionBorderColor: 'rgba(6, 89, 153, 0.7)',
+        selectionLineWidth: 1.5,
+        selectionDashArray: [10, 5],
+        notAllowedCursor: 'default'
+      });
     });
     this.fabricService.Width = 1500;
     this.fabricService.Height = 857;
@@ -131,48 +133,6 @@ export class DesignerComponent implements OnInit, AfterViewInit{
     this.fabricService.drawGrid();
   }
 
-  public generateSeatMap(): void {
-    const map: OptSeat[][] = [];
-
-    for (let r = 0; r < this.rowMetric.count; r++) {
-      const row: OptSeat[] = [];
-
-      for (let c = 0; c < this.colMetric.count; c++) {
-        row.push(new OptSeat(r * this.rowMetric.distance, c * this.colMetric.distance));
-      }
-
-      map.push(row);
-    }
-
-    this.map = map;
-  }
-
-  public toggleSeat(seat: OptSeat): void {
-    seat.disabled = !seat.disabled;
-  }
-
-  public getSeatDots(): void {
-    const json = [];
-    for (let r = 0; r < this.rowMetric.count; r++) {
-      for (let c = 0; c < this.colMetric.count; c++) {
-        const seat = this.map[r][c];
-        if (seat.disabled) {
-          continue;
-        }
-        json.push(seat.toJson());
-      }
-    }
-
-    this.json = json;
-    const body = {
-      name: this.name,
-      coords: JSON.stringify(json),
-    };
-    this.layoutService.saveLayout(body).subscribe(data => {
-      console.log('[Debug] Data:', data);
-    });
-  }
-
   generateSeats(): void {
     const success = this.fabricService.generateSeats(this.rowMetric.count, this.colMetric.count,
                     this.colMetric.distance, this.rowMetric.distance, 40);
@@ -182,11 +142,11 @@ export class DesignerComponent implements OnInit, AfterViewInit{
   }
 
   toggleSnapToGrid(): void {
-    console.log(this.snapToGrid);
     this.fabricService.SnapToGrid = this.snapToGrid;
   }
 
   saveLayout(name: string): void {
+    // A lenti függvény visszaadja a paraméterezett Layout class-t
     this.fabricService.saveLayout(name);
   }
 
