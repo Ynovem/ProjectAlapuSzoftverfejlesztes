@@ -29,7 +29,6 @@ export class DesignerComponent implements OnInit, AfterViewInit{
 
   constructor(private layoutService: LayoutService, private fabricService: FabricService,
               private ngZone: NgZone, private elementRef: ElementRef) {
-    document.body.style.overflowY = 'hidden';
   }
 
   ngOnInit(): void
