@@ -62,10 +62,10 @@ def solve_layout(
     elif solver_id == 2:
         algorithm = FirstFree(rule)
     elif solver_id == 3:
-        algorithm = MaximalIndependentSet()
+        algorithm = MaximalIndependentSet(rule)
     elif solver_id == 4:
-        algorithm = MinimumDegree()
+        algorithm = MinimumDegree(rule)
     elif solver_id == 5:
-        algorithm = ForwardSelection()
+        algorithm = ForwardSelection(rule)
 
     return algorithm.solve(layout)

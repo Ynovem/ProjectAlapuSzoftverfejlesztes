@@ -10,6 +10,7 @@ import { LayoutService } from '../_services/layout.service';
 import { SolverService } from '../_services/solver.service';
 import {fabric} from 'fabric';
 import {FabricService} from '../_services/fabric.service';
+import {Seat} from '../_dtos/seatmap';
 
 @Component({
   selector: 'app-solver',
@@ -25,6 +26,11 @@ export class SolverComponent implements OnInit, AfterViewInit {
   selectedRule: IRule | null = null;
   selectedSolver: Solver | null = null;
   selectedLayout: ILayout | null = null;
+
+  solvedLayout: ILayout | null = null;
+
+  numberOfAllSeats = 0;
+  numberOfFreeSeats = 0;
 
   constructor(
       private ruleService: RuleService,
@@ -127,11 +133,18 @@ export class SolverComponent implements OnInit, AfterViewInit {
     if (this.selectedSolver === null) {
       return;
     }
+
+    this.solvedLayout = null;
     this.solverService.solve(this.selectedSolver.id, {
       rule_id: this.selectedRule.id,
       layout_id: this.selectedLayout.id,
-    }).subscribe(sovledLayout => {
-      this.fabricService.loadLayout(sovledLayout);
+    }).subscribe(solvedLayout => {
+      this.solvedLayout = solvedLayout;
+      this.fabricService.loadLayout(solvedLayout);
+
+      const coords: Seat[] = JSON.parse(solvedLayout.coords);
+      this.numberOfAllSeats = coords.length;
+      this.numberOfFreeSeats = coords.filter((seat: Seat) => seat.busy).length;
     });
   }
 

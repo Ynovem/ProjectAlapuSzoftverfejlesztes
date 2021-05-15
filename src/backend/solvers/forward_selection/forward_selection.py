@@ -68,4 +68,6 @@ class ForwardSelection:
         for i in range(1, len(lst)):
             if len(lst[max_idx]) < len(lst[i]):
                 max_idx = i
+        if len(lst) <= max_idx:
+            return {}
         return lst[max_idx]

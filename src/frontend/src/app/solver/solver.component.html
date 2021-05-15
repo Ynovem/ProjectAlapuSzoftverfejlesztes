@@ -53,6 +53,17 @@
                 {{selectedSolver.description}}
               </fieldset>
             </div>
+            <div *ngIf="solvedLayout">
+              <div>
+                Number of seats: {{numberOfAllSeats}}
+              </div>
+              <div>
+                Number of free seats: {{numberOfFreeSeats}}
+              </div>
+              <div>
+                Utilization of seats: {{numberOfFreeSeats/numberOfAllSeats}}
+              </div>
+            </div>
           </div>
         </div>
         <div class="row justify-content-md-left">
