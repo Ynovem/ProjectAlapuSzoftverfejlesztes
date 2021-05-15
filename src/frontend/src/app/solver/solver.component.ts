@@ -1,9 +1,11 @@
 import {AfterViewInit, Component, ElementRef, NgZone, OnInit} from '@angular/core';
 import { map } from 'rxjs/operators';
 
+import { IRule, Rule } from '../_dtos/rule';
 import { ILayout, Layout } from '../_dtos/layout';
 import { Solver } from '../_dtos/solver';
 
+import { RuleService } from '../_services/rule.service';
 import { LayoutService } from '../_services/layout.service';
 import { SolverService } from '../_services/solver.service';
 import {fabric} from 'fabric';
@@ -16,40 +18,29 @@ import {FabricService} from '../_services/fabric.service';
 })
 export class SolverComponent implements OnInit, AfterViewInit {
   canvasId = 'designer-canvas';
+  rules: IRule[] = [];
   layouts: ILayout[] = [];
   solvers: Solver[] = [];
 
+  selectedRule: IRule | null = null;
   selectedSolver: Solver | null = null;
   selectedLayout: ILayout | null = null;
 
   constructor(
+      private ruleService: RuleService,
       private layoutService: LayoutService,
       private solverService: SolverService,
       private fabricService: FabricService,
       private elementRef: ElementRef,
       private ngZone: NgZone
   ) {
+    this.ruleService.getRules()
+        .subscribe(rules => this.rules = rules);
     this.layoutService.getLayouts()
         .pipe(map(data => data.map((layout: ILayout) => new Layout(layout))))
         .subscribe(layouts => this.layouts = layouts);
     this.solverService.getSolvers()
         .subscribe(solvers => this.solvers = solvers);
-
-    /*
-    this.solvers = [
-        new Solver(1, "Backtracking", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n"),
-        new Solver(2, "Algorithm 1", "desc 1"),
-        new Solver(3, "Algorithm 2", "desc 2"),
-    ];
-
-    this.seatLayouts = [
-      new SeatLayout(1, "Layout 1", [], "assets/thumbnails/sample.png"),
-      new SeatLayout(2, "Layout 2", [], "assets/thumbnails/sample.png"),
-      new SeatLayout(3, "Layout 3", [], "assets/thumbnails/sample.png"),
-      new SeatLayout(4, "Layout 4", [], "assets/thumbnails/sample.png"),
-      new SeatLayout(5, "Layout 5", [], "assets/thumbnails/sample.png"),
-    ];
-    */
   }
 
   ngOnInit(): void {

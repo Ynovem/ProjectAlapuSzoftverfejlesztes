@@ -14,6 +14,19 @@
           <div class="col-sm">
             <div class="input-group">
               <div class="input-group-prepend">
+                <label class="input-group-text" for="ruleSelector">Rule</label>
+              </div>
+              <select class="custom-select" id="ruleSelector" [(ngModel)]="selectedRule">
+                <option [ngValue]="null" disabled>Select Rule</option>
+                <option *ngFor="let rule of rules;" [ngValue]="rule">{{rule.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-md-left">
+          <div class="col-sm">
+            <div class="input-group">
+              <div class="input-group-prepend">
                 <label class="input-group-text" for="layoutSelector">Layout</label>
               </div>
               <select class="custom-select" id="layoutSelector" [(ngModel)]="selectedLayout" (change)="onLayoutChange()">
@@ -45,7 +58,7 @@
         <div class="row justify-content-md-left">
           <div class="col-sm btnCol">
             <button type="button" class="btn btn-success float-right solveBtn" (click)="solve()"
-                    [disabled]="!selectedLayout || !selectedSolver">Solve
+                    [disabled]="!selectedRule || !selectedLayout || !selectedSolver">Solve
             </button>
           </div>
         </div>
