@@ -1,0 +1,37 @@
+.solverContainer{
+  padding-top: 1rem;
+}
+
+.canvas{
+  border: darkgray solid 1px;
+}
+
+.input-group-text {
+  min-width: 80px;
+}
+
+.buttonContainer{
+  height: 100%;
+  background-color: whitesmoke;
+  color: black;
+  font-size: 14pt;
+  border-radius: 0px 10px 10px 0px;
+}
+
+.buttonContainer .row{
+  padding-top: 15px;
+  margin: 0 !important;
+}
+
+.solveBtn{
+  margin-right: 16px;
+  width: 95%;
+  height: 100px;
+  font-weight: bold;
+  font-size: 20pt;
+}
+
+.btnCol{
+  position: absolute;
+  bottom: 16px;
+}

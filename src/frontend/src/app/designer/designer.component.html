@@ -106,9 +106,9 @@
           <div class="col-sm">
             <div class="form-group">
               <label for="layoutNameTextbox">Layout name</label>
-              <input type="email" class="form-control" id="layoutNameTextbox" placeholder="Enter a name...">
+              <input [(ngModel)]="name" class="form-control" id="layoutNameTextbox" placeholder="Enter a name...">
             </div>
-            <button type="button" class="btn btn-primary mt-2 float-right" (click)="saveLayout('test')">Save layout
+            <button type="button" class="btn btn-primary mt-2 float-right" (click)="saveLayout()">Save layout
             </button>
           </div>
         </div>

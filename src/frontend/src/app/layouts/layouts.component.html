@@ -1,26 +1,32 @@
-<h2>Layouts</h2>
-
-<table class="table table-striped layout">
-	<thead>
-		<tr>
-			<th scope="col">#</th>
-			<th scope="col">name</th>
-			<th scope="col">creation</th>
-			<th scope="col">number of coords</th>
-			<th scope="col">coords (json)</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr *ngFor="let layout of layouts">
-			<th scope="row">{{layout.id}}</th>
-			<td>{{layout.name}}</td>
-			<td>{{layout.created | date: 'yyyy/MM/dd h:mm:ss a'}}</td>
-			<td>{{layout.coords.length}}
-				<button (click)="layout.displayed = !layout.displayed">{{layout.displayed ? "Hide" : "Show"}}</button>
-			</td>
-			<td>
-				<div [hidden]="!layout.displayed">{{layout.coords | json}}</div>
-			</td>
-		</tr>
-	</tbody>
-</table>
+<div class="container-fluid tableContainer">
+  <h2>Layouts</h2>
+  <table class="table table-striped layout">
+    <thead>
+      <tr>
+        <th scope="col" style="width: 5%">#</th>
+        <th scope="col" style="width: 23%">Name</th>
+        <th scope="col" style="width: 20%">Creation</th>
+        <th scope="col" style="width: 10%">Coords</th>
+        <th scope="col" style="width: 25%">JSON</th>
+        <th scope="col">Thumbnail</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let layout of layouts">
+        <th scope="row">{{layout.id}}</th>
+        <td>{{layout.name}}</td>
+        <td>{{layout.created | date: 'yyyy/MM/dd h:mm:ss a'}}</td>
+        <td>
+          <div>{{layout.coords.length}}</div>
+          <button class="btn btn-secondary mt-2" (click)="layout.displayed = !layout.displayed">{{layout.displayed ? "Hide" : "Show"}}</button>
+        </td>
+        <td>
+          <div [hidden]="!layout.displayed">{{layout.coords | json}}</div>
+        </td>
+        <td>
+          <img src="assets/img/placeholder.png" class="thumbnail">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

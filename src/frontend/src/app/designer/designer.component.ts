@@ -10,6 +10,7 @@ import { LayoutService} from '../_services/layout.service';
 import { Metric, OptSeat } from '../_dtos/seatmap';
 import {FabricService} from '../_services/fabric.service';
 import {fabric} from 'fabric';
+import {Layout} from '../_dtos/layout';
 
 @Component({
   selector: 'app-designer',
@@ -37,7 +38,7 @@ export class DesignerComponent implements OnInit, AfterViewInit{
 
   ngAfterViewInit(): void {
     this.ngZone.runOutsideAngular( () => {
-      this.fabricService.Canvas = new fabric.Canvas(this.canvasId, {
+      this.fabricService.setCanvas(new fabric.Canvas(this.canvasId, {
         imageSmoothingEnabled: false,
         backgroundColor: '#fff',
         renderOnAddRemove: false,
@@ -46,10 +47,12 @@ export class DesignerComponent implements OnInit, AfterViewInit{
         selectionLineWidth: 1.5,
         selectionDashArray: [10, 5],
         notAllowedCursor: 'default'
-      });
+      }), false);
     });
     this.fabricService.Width = 1500;
     this.fabricService.Height = 857;
+
+    this.fabricService.drawGrid();
 
     this.elementRef.nativeElement.querySelector('.canvas-container')
       .addEventListener('wheel', (event: WheelEvent) => {
@@ -120,17 +123,6 @@ export class DesignerComponent implements OnInit, AfterViewInit{
           this.fabricService.Paste();
         });
       });
-
-    window
-      .addEventListener('keydown', (event: KeyboardEvent) => {
-        if (event.key === 'Delete' || event.key === ',') {
-          this.ngZone.runOutsideAngular(() => {
-            this.fabricService.Delete();
-          });
-        }
-      });
-
-    this.fabricService.drawGrid();
   }
 
   generateSeats(): void {
@@ -145,9 +137,13 @@ export class DesignerComponent implements OnInit, AfterViewInit{
     this.fabricService.SnapToGrid = this.snapToGrid;
   }
 
-  saveLayout(name: string): void {
-    // A lenti függvény visszaadja a paraméterezett Layout class-t
-    this.fabricService.saveLayout(name);
+  saveLayout(): void {
+    const savableLayout: Layout = this.fabricService.saveLayout(this.name);
+    // savableLayout.coords = JSON.stringify(savableLayout.coords);
+    this.layoutService.saveLayout(savableLayout).subscribe(data => {
+      console.log(data);
+      this.fabricService.clear(true);
+    });
   }
 
   resetCanvas(): void {

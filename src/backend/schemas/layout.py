@@ -18,6 +18,8 @@ class LayoutCreate(LayoutBase):
 class LayoutInDBBase(LayoutBase):
     id: Optional[int] = None
     created: datetime = None
+    name: str = None
+    coords: str = None
 
     class Config:
         orm_mode = True

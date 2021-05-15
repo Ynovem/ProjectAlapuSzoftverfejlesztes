@@ -18,7 +18,7 @@ export class Layout implements ILayout{
 	constructor(layout: ILayout) {
 		this.id = layout.id;
 		this.name = layout.name;
-		this.coords = JSON.parse(layout.coords);
+		this.coords = layout.coords;
 		this.created = layout.created;
 	}
 }

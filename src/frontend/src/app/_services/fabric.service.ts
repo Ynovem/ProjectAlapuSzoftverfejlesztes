@@ -1,6 +1,6 @@
 import {Injectable, NgZone} from '@angular/core';
 
-import { fabric } from 'fabric';
+import {fabric} from 'fabric';
 import {IEvent, Point} from 'fabric/fabric-impl';
 import {Layout} from '../_dtos/layout';
 
@@ -14,7 +14,7 @@ export class POINT {
   }
 }
 
-class Seat{
+class Seat {
   x: number;
   y: number;
   busy: boolean;
@@ -25,7 +25,7 @@ class Seat{
     this.busy = busy;
   }
 
-  distance(seat: Seat): number{
+  distance(seat: Seat): number {
     const tmpX = (this.x - seat.x);
     const tmpY = (this.y - seat.y);
     return Math.sqrt(tmpX * tmpX + tmpY * tmpY);
@@ -38,6 +38,7 @@ class Seat{
 })
 export class FabricService {
   protected canvas?: fabric.Canvas;
+  protected isStatic = false;
   protected width = 0;
   protected height = 0;
   protected cellSize = 10;
@@ -75,16 +76,16 @@ export class FabricService {
     fabric.Canvas.prototype.notAllowedCursor = 'default';
   }
 
-  public set Canvas(canvas: fabric.Canvas) {
+  public setCanvas(canvas: fabric.Canvas, isStatic: boolean): void {
     this.canvas = canvas;
-    this.canvas.on('object:moving', event => {
-      this.onObjectMove(event);
-    });
-  }
-
-  public get Canvas(): fabric.Canvas {
-    if (this.canvas) { return this.canvas; }
-    else { return new fabric.Canvas(''); }
+    if (isStatic){
+      this.canvas.off('mouse:down');
+    }
+    else{
+      this.canvas.on('object:moving', event => {
+        this.onObjectMove(event);
+      });
+    }
   }
 
   public set Width(width: number) {
@@ -100,33 +101,39 @@ export class FabricService {
   }
 
   public clear(drawCanvas: boolean): void {
-    if (!this.canvas) { return; }
-    this.canvas.getObjects().filter(obj => obj.evented === true).forEach(obj => {
-      if (!this.canvas) { return; }
+    if (!this.canvas) {
+      return;
+    }
+    this.canvas.getObjects().filter(obj => obj.type === 'rect').forEach(obj => {
+      if (!this.canvas) {
+        return;
+      }
       this.canvas.remove(obj);
     });
     const vpt = this.canvas.viewportTransform;
-    if (vpt){
+    if (vpt) {
       vpt[4] = 0;
       vpt[5] = 0;
     }
     this.canvas.setZoom(1);
-    if (drawCanvas) { this.canvas.renderAll(); }
+    if (drawCanvas) {
+      this.canvas.renderAll();
+    }
   }
 
-  getSeatData(): string{
+  getSeatData(): string {
     let minX = this.width * 2;
     let minY = this.height * 2;
     const seats: Seat[] = [];
     const objects = this.canvas?.getObjects().filter(obj => obj.type === 'rect');
     objects?.forEach(obj => {
       if (obj.left && obj.top) {
-      if (obj.left < minX) {
-        minX = obj.left;
-      }
-      if (obj.top < minY) {
-        minY = obj.top;
-      }
+        if (obj.left < minX) {
+          minX = obj.left;
+        }
+        if (obj.top < minY) {
+          minY = obj.top;
+        }
       }
     });
 
@@ -138,24 +145,73 @@ export class FabricService {
     return JSON.stringify(seats);
   }
 
-  saveLayout(layoutName: string): Layout{
-    const id = 0;
-    const name = layoutName;
-    const created = '';
-    const coords = this.getSeatData();
+  // Csak ez a függvény kell a kirajzoláshoz
+  // megoldásnál is ez kell, ha busy a szék azt zöldre rakja
+  loadLayout(layout: Layout): void {
+    if (!this.canvas) {
+      return;
+    }
+    this.clear(false);
+    console.log(layout.coords);
 
-    return new Layout({id, name, coords, created});
+    const seats: Seat[] = JSON.parse(layout.coords);
+    const rectGroup: fabric.Object[] = [];
+    console.log(seats);
+
+    seats.forEach(seat => {
+      const rect = new fabric.Rect({
+        width: this.seatSize,
+        height: this.seatSize,
+        fill: '#dcdde1',
+        stroke: '#ff3838',
+        strokeWidth: 1,
+        opacity: 1,
+        top: seat.y + 10,
+        left: seat.x + 10,
+        selectable: false,
+        evented: false
+      });
+      if (seat.busy){
+        rect.fill = '#0be881';
+        rect.stroke = '#05c46b';
+      }
+      rectGroup.push(rect);
+      this.canvas?.add(rect);
+    });
+
+    const selection = new fabric.ActiveSelection(rectGroup);
+    const boundingHeight = selection.getBoundingRect().height;
+    const boundingWidth = selection.getBoundingRect().width;
+    selection.destroy();
+    this.canvas.discardActiveObject();
+
+    const ratio = Math.min(this.height / (boundingHeight + 20), this.width / (boundingWidth + 20));
+
+    this.canvas.setZoom(ratio);
+    this.canvas.requestRenderAll();
+  }
+
+  saveLayout(layoutName: string): Layout {
+    // Ez tárolja a canvas-ról készített képet
+    const img = new Image();
+    if (this.canvas){
+      img.src = this.canvas.toDataURL();
+    }
+    console.log(this.getSeatData());
+    return new Layout({id: 0, name: layoutName, coords: this.getSeatData(), created: ''});
   }
 
   addSeat(): void {
-    if (!this.canvas) { return; }
+    if (!this.canvas) {
+      return;
+    }
     const seat = new fabric.Rect({
       width: this.seatSize,
       height: this.seatSize,
       fill: '#ffda79',
       hasBorders: true,
-      stroke : '#ccae62',
-      strokeWidth : 1,
+      stroke: '#ccae62',
+      strokeWidth: 1,
       opacity: 1,
       lockScalingX: true,
       lockScalingY: true,
@@ -168,8 +224,12 @@ export class FabricService {
   }
 
   Delete(): void {
-    if (!this.canvas) { return; }
-    if (!this.canvas.getActiveObjects()) { return; }
+    if (!this.canvas) {
+      return;
+    }
+    if (!this.canvas.getActiveObjects()) {
+      return;
+    }
     this.canvas.getActiveObjects().forEach(obj => {
       this.canvas?.remove(obj);
     });
@@ -177,16 +237,20 @@ export class FabricService {
     this.canvas.renderAll();
   }
 
-  Copy(): void{
-    if (!this.canvas) { return; }
-    this.canvas.getActiveObject().clone((cloned: any)  => {
+  Copy(): void {
+    if (!this.canvas) {
+      return;
+    }
+    this.canvas.getActiveObject().clone((cloned: any) => {
       this.clipboard = cloned;
     });
   }
 
-  Paste(): void{
+  Paste(): void {
     this.clipboard.clone((clonedObj: any) => {
-      if (!this.canvas) { return; }
+      if (!this.canvas) {
+        return;
+      }
       this.canvas.discardActiveObject();
       clonedObj.set({
         left: clonedObj.left + 50,
@@ -197,7 +261,9 @@ export class FabricService {
         // active selection needs a reference to the canvas.
         clonedObj.canvas = this.canvas;
         clonedObj.forEachObject((obj: any) => {
-          if (!this.canvas) { return; }
+          if (!this.canvas) {
+            return;
+          }
           this.canvas.add(obj);
         });
         // this should solve the unselectability
@@ -212,37 +278,54 @@ export class FabricService {
     });
   }
 
-  generateSeats(rows: number, cols: number, distanceX: number, distanceY: number, seatSize: number): boolean{
+  generateSeats(rows: number, cols: number, distanceX: number, distanceY: number, seatSize: number): boolean {
     if ((rows - 1) * (distanceY + this.seatSize) + this.seatSize > this.height * 2 - 20 ||
-        (cols - 1) * (distanceX + this.seatSize) + this.seatSize > this.width * 2 - 20 ){
+      (cols - 1) * (distanceX + this.seatSize) + this.seatSize > this.width * 2 - 20) {
       return false;
     }
-    if (!this.canvas) { return false; }
+    if (!this.canvas) {
+      return false;
+    }
+    const rectGroup: fabric.Object[] = [];
     this.clear(false);
-    for (let row = 0; row < rows; row++){
-      for (let col = 0; col < cols; col++){
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
         const seat = new fabric.Rect({
           width: seatSize,
           height: seatSize,
           fill: '#ffda79',
           hasBorders: true,
-          stroke : '#ccae62',
-          strokeWidth : 1,
+          stroke: '#ccae62',
+          strokeWidth: 1,
           opacity: 1,
           lockScalingX: true,
           lockScalingY: true,
           top: this.cellSize + row * (distanceY + seatSize),
           left: this.cellSize + col * (distanceX + seatSize)
         });
+        rectGroup.push(seat);
         this.canvas.add(seat);
       }
     }
-    this.canvas.renderAll();
+
+    const selection = new fabric.ActiveSelection(rectGroup);
+    const boundingHeight = selection.getBoundingRect().height;
+    const boundingWidth = selection.getBoundingRect().width;
+    selection.destroy();
+    this.canvas.discardActiveObject();
+
+    const ratio = Math.min(this.height / (boundingHeight + 20), this.width / (boundingWidth + 20));
+
+    this.canvas.setZoom(ratio);
+    this.canvas.requestRenderAll();
     return true;
   }
 
   drawGrid(): void {
-    if (!this.canvas) { return; }
+    if (!this.canvas) {
+      return;
+    }
+
     const gridWidth = this.width * 2;
     const gridHeight = this.width * 2;
 
@@ -283,68 +366,80 @@ export class FabricService {
   }
 
   onScroll(event: WheelEvent): void {
-      if (!this.canvas) { return; }
-      const delta = event.deltaY;
-      let zoom = this.canvas.getZoom();
-      zoom *= 0.999 ** delta;
-      if (zoom > 8) {
-        zoom = 8;
-      }
-      if (zoom < 0.5) {
-        zoom = 0.5;
-      }
+    if (!this.canvas) {
+      return;
+    }
 
-      this.canvas.zoomToPoint({x: event.offsetX, y: event.offsetY} as Point, zoom);
+    const delta = event.deltaY;
+    let zoom = this.canvas.getZoom();
+    zoom *= 0.999 ** delta;
+    if (zoom > 8) {
+      zoom = 8;
+    }
+    if (zoom < 0.5) {
+      zoom = 0.5;
+    }
 
-      if (event.deltaY > 0) {
-        const vpt = this.canvas.viewportTransform;
-        if (vpt) {
-          if (vpt[4] > 0) {
-            vpt[4] = 0;
-          }
-          if (vpt[4] < -2 * this.width * zoom + this.width) {
-            vpt[4] = Math.floor(-2 * this.width * zoom + this.width);
-          }
-          if (vpt[5] > 0) {
-            vpt[5] = 0;
-          }
-          if (vpt[5] < -2 * this.height * zoom + this.height) {
-            vpt[5] = Math.floor(-2 * this.height * zoom + this.height);
-          }
+    this.canvas.zoomToPoint({x: event.offsetX, y: event.offsetY} as Point, zoom);
+
+    if (event.deltaY > 0) {
+      const vpt = this.canvas.viewportTransform;
+      if (vpt) {
+        if (vpt[4] > 0) {
+          vpt[4] = 0;
+        }
+        if (vpt[4] < -2 * this.width * zoom + this.width) {
+          vpt[4] = Math.floor(-2 * this.width * zoom + this.width);
+        }
+        if (vpt[5] > 0) {
+          vpt[5] = 0;
+        }
+        if (vpt[5] < -2 * this.height * zoom + this.height) {
+          vpt[5] = Math.floor(-2 * this.height * zoom + this.height);
         }
       }
+    }
 
-      this.canvas.forEachObject(object => {
-        object.setCoords();
-      });
-      this.canvas.requestRenderAll();
+    this.canvas.forEachObject(object => {
+      object.setCoords();
+    });
+    this.canvas.requestRenderAll();
   }
 
-  onMouseOver(event: MouseEvent): void{
+  onMouseOver(event: MouseEvent): void {
     this.isHovering = true;
   }
 
-  onMouseLeave(event: MouseEvent): void{
+  onMouseLeave(event: MouseEvent): void {
     this.isHovering = false;
   }
 
-  onKeyDown(event: KeyboardEvent): void{
-    if (!this.canvas) { return; }
-    if (event.key === 'Alt'){
+  onKeyDown(event: KeyboardEvent): void {
+    if (!this.canvas) {
+      return;
+    }
+    if (event.key === 'Alt') {
       event.preventDefault();
-      if (this.isHovering){
+      if (this.isHovering) {
         this.canvas.setCursor('pointer');
         this.canvas.defaultCursor = 'pointer';
         this.canvas.hoverCursor = 'pointer';
       }
     }
+    if (event.key === 'Delete' || event.key === ',') {
+      this.Delete();
+    }
   }
 
-  onKeyUp(event: KeyboardEvent): void{
+  onKeyUp(event: KeyboardEvent): void {
     if (event.key === 'Alt') {
-      if (!this.canvas) { return; }
-      if (this.isDragging){
-        if (!this.canvas) { return; }
+      if (!this.canvas) {
+        return;
+      }
+      if (this.isDragging) {
+        if (!this.canvas) {
+          return;
+        }
         this.isDragging = false;
         this.canvas.forEachObject(object => {
           object.setCoords();
@@ -359,7 +454,9 @@ export class FabricService {
 
   onMouseDown(event: MouseEvent): void {
     if (event.altKey) {
-      if (!this.canvas) { return; }
+      if (!this.canvas) {
+        return;
+      }
       this.canvas.discardActiveObject();
       this.isDragging = true;
       this.canvas.selection = false;
@@ -370,7 +467,9 @@ export class FabricService {
 
   onMouseMove(event: MouseEvent): void {
     if (this.isDragging) {
-      if (!this.canvas) { return; }
+      if (!this.canvas) {
+        return;
+      }
       const zoom = this.canvas.getZoom();
       const distanceX = event.clientX - this.lastPosX;
       const distanceY = event.clientY - this.lastPosY;
@@ -403,8 +502,10 @@ export class FabricService {
   }
 
   onMouseUp(event: MouseEvent): void {
-    if (this.isDragging){
-      if (!this.canvas) { return; }
+    if (this.isDragging) {
+      if (!this.canvas) {
+        return;
+      }
       this.isDragging = false;
       this.canvas.forEachObject(object => {
         object.setCoords();
@@ -418,11 +519,15 @@ export class FabricService {
   }
 
   onObjectMove(event: IEvent): void {
-    if (!this.snapToGrid) { return; }
-    this.ngZone.runOutsideAngular( () => {
+    if (!this.snapToGrid) {
+      return;
+    }
+    this.ngZone.runOutsideAngular(() => {
       const object = event.target;
-      if (!object || !object.top || !object.left) { return; }
-      if (object.top % this.cellSize !== 0 || object.left % this.cellSize !== 0){
+      if (!object || !object.top || !object.left) {
+        return;
+      }
+      if (object.top % this.cellSize !== 0 || object.left % this.cellSize !== 0) {
         object.top = Math.round(object.top / this.cellSize) * this.cellSize;
         object.left = Math.round(object.left / this.cellSize) * this.cellSize;
       }

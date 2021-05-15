@@ -1,46 +1,66 @@
-<p>Solver works!</p>
+<div class="container-fluid solverContainer">
+  <div class="row justify-content-md-left editorContainer">
+    <div class="col-sm pr-0 mr-0">
+      <canvas id="{{canvasId}}" class="canvas" width="1500" height="857"></canvas>
+    </div>
+    <div class="col-sm pl-0 ml-0">
+      <div class="container-fluid buttonContainer pl-0 ml-0 mr-0 pr-0">
+        <div class="row justify-content-md-center">
+          <div class="col-sm text-center">
+            <h1>Select parameters</h1>
+            </div>
+        </div>
+        <div class="row justify-content-md-left">
+          <div class="col-sm">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="layoutSelector">Layout</label>
+              </div>
+              <select class="custom-select" id="layoutSelector" [(ngModel)]="selectedLayout" (change)="onLayoutChange()">
+                <option [ngValue]="null" disabled>Select Layout</option>
+                <option *ngFor="let layout of layouts;" [ngValue]="layout">{{layout.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-md-left">
+          <div class="col-sm">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="solverSelector">Solver</label>
+              </div>
+              <select class="custom-select" id="solverSelector" [(ngModel)]="selectedSolver">
+                <option [ngValue]="null" disabled>Choose...</option>
+                <option *ngFor="let solver of solvers;" [ngValue]="solver">{{solver.name}}</option>
+              </select>
+            </div>
+            <div class="mt-3">
+              <fieldset *ngIf="selectedSolver">
+                <legend>Description:</legend>
+                {{selectedSolver.description}}
+              </fieldset>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-md-left">
+          <div class="col-sm btnCol">
+            <button type="button" class="btn btn-success float-right solveBtn" (click)="solve()"
+                    [disabled]="!selectedLayout || !selectedSolver">Solve
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div class="container">
-	<div class="row justify-content-md-center">
-		<div class="col-sm">
-			<div class="input-group">
-				<div class="input-group-prepend">
-					<label class="input-group-text" for="layoutSelector">Layout</label>
-				</div>
-				<select class="custom-select" id="layoutSelector" [(ngModel)]="selectedLayout">
-					<option [ngValue]="null" disabled>Select Layout</option>
-					<option *ngFor="let layout of layouts;" [ngValue]="layout">{{layout.name}}</option>
-				</select>
-			</div>
-			<div class="input-group">
-				<div class="input-group-prepend">
-					<label class="input-group-text" for="solverSelector">Solver</label>
-				</div>
-				<select class="custom-select" id="solverSelector" [(ngModel)]="selectedSolver">
-					<option [ngValue]="null" disabled>Choose...</option>
-					<option *ngFor="let solver of solvers;" [ngValue]="solver">{{solver.name}}</option>
-				</select>
-			</div>
-			<div>
-				<fieldset *ngIf="selectedSolver">
-					<legend>Description of ...algorithm....</legend>
-					{{selectedSolver.description}}
-				</fieldset>
-			</div>
-		</div>
-		<!--
-		<div class="col-sm">
-			<div class="input-group">
-				<div class="text-center" *ngIf="selectedLayout">
-					<img [src]="selectedLayout.thumbnail" alt="">
-				</div>
-			</div>
-		</div>
-		-->
-	</div>
-	<div class="row justify-content-md-center">
-		<div class="col-sm">
-			<button type="button" class="btn btn-secondary" (click)="solve()" [disabled]="!selectedLayout || !selectedSolver">Solve</button>
-		</div>
-	</div>
+  <!--
+  <div class="col-sm">
+    <div class="input-group">
+      <div class="text-center" *ngIf="selectedLayout">
+        <img [src]="selectedLayout.thumbnail" alt="">
+      </div>
+    </div>
+  </div>
+  -->
+
 </div>

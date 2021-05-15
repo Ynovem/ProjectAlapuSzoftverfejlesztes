@@ -45,6 +45,7 @@ def solve_layout(
     layout = crud.layout.get(db, id=body.layout_id)
 
     print(f'Body: {layout}')
+    print(f'Name: {layout.name}')
     print(f'Coords: {json.loads(layout.coords)}')
     algorithm = Backtracking()
     if solver_id == 1:
